@@ -26,11 +26,11 @@ fields = [ "Photo/video identifier",
 "Photo/video extension original", 
 "Photos/video marker (0 = photo, 1 = video)" ]
 
-cities = set(["istanbul", "ankara", "izmir", "bursa", "adana", "eskişehir", "antalya", "gaziantep", u"muğla", "denizli", "konya", "kocaeli","Mersin","Kayseri","Sakarya","Manisa","Samsun","Yalova","Trabzon","Edirne","Karabük","Balıkesir","Isparta","Malatya",
-"Çanakkale","Erzurum","Kırıkkale","Tekirdağ","Bolu","Uşak","Aydın","Ordu","Sivas","Kütahya","Afyon","Çorum","Giresun","Diyarbakır","Elazığ",
-"Kahramanmaraş","Burdur","Rize","Bilecik","Zonguldak","Nevşehir","Artvin","Karaman","Tunceli","Düzce","Kırşehir","Kırklareli","Çankırı","Sinop",
-"Kastamonu","Hatay","Osmaniye","Tokat","Erzincan","Yozgat","Batman","Şanlıurfa","Van","Niğde","Amasya","Aksaray","Gümüşhane","Adıyaman","Kilis",
-"Siirt","Kars","Mardin","Bartın","Hakkari","Şırnak","Iğdır","Bayburt","Bitlis","Bingöl","Ağrı","Ardahan","Muş"])
+cities = set(["istanbul", "ankara", "izmir", "bursa", "adana", "eskişehir", "antalya", "gaziantep", u"muğla", "denizli", "konya", "kocaeli","mersin","kayseri","sakarya","manisa","samsun","yalova","trabzon","edirne",u"karabük","karabuk",u"balıkesir","balikesir",u"ısparta","isparta","malatya",
+u"çanakkale","canakkale","erzurum",u"kırıkkale","kirikkale",u"tekirdağ","tekirdag","bolu",u"uşak","usak",u"aydın","aydin","ordu","sivas",u"kütahya","kutahya","afyon",u"çorum","corum","giresun",u"diyarbakır","diyarbakir",u"elazığ","elazig"
+u"kahramanmaraş","kahramanmaras","burdur","rize","bilecik","zonguldak",u"nevşehir","nevsehir","artvin","karaman","tunceli",u"düzce","duzce",u"kırşehir","kirsehir",u"kırklareli","kirklareli",u"çankırı","cankiri","sinop",
+"kastamonu","hatay","osmaniye","tokat","erzincan","yozgat","batman",u"şanlıurfa","sanliurfa","van",u"niğde","nigde","amasya","aksaray",u"gümüşhane","gumushane",u"adıyaman","adiyaman","kilis",
+"siirt","kars","mardin","bartin",u"bartın","hakkari",u"şırnak","sirnak",u"ığdır","igdir","bayburt","bitlis",u"bingöl","bingol","agri",u"ağrı","ardahan","mus",u"muş"])
 
 
 # cities listesi 71 il
