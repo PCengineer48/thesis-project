@@ -26,12 +26,7 @@ fields = [ "Photo/video identifier",
 "Photo/video extension original", 
 "Photos/video marker (0 = photo, 1 = video)" ]
 
-cities = set(["istanbul", "ankara", "izmir", "bursa", "adana", "eskişehir", "antalya", "gaziantep", u"muğla", "denizli", "konya", "kocaeli","Mersin","Kayseri","Sakarya","Manisa","Samsun","Yalova","Trabzon","Edirne","Karabük","Balıkesir","Isparta","Malatya",
-"Çanakkale","Erzurum","Kırıkkale","Tekirdağ","Bolu","Uşak","Aydın","Ordu","Sivas","Kütahya","Afyon","Çorum","Giresun","Diyarbakır","Elazığ",
-"Kahramanmaraş","Burdur","Rize","Bilecik","Zonguldak","Nevşehir","Artvin","Karaman","Tunceli","Düzce","Kırşehir","Kırklareli","Çankırı","Sinop",
-"Kastamonu","Hatay","Osmaniye","Tokat","Erzincan","Yozgat","Batman","Şanlıurfa","Van","Niğde","Amasya","Aksaray","Gümüşhane","Adıyaman","Kilis",
-"Siirt","Kars","Mardin","Bartın","Hakkari","Şırnak","Iğdır","Bayburt","Bitlis","Bingöl","Ağrı","Ardahan","Muş"])
-
+cities = set(["konya", "ankara", "urfa", "karaman", "adana", "istanbul", "antalya", "izmir", u"muğla"])
 
 # cities listesi 71 il
 # her set elemanı için o isimle 
