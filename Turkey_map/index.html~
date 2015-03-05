@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="js/jquery-ui-1.10.4/css/ui-lightness/jquery-ui-1.10.4.css">
+<style>
+#easy_zoom{
+	width:300px;
+	height:300px;	
+	border:5px solid #eee;
+	background:#fff;
+	color:#333;
+	
+	position: absolute;
+        top: 0px;
+        left: 200px;
+        z-index: 1;
+	/* overflow:hidden; */
+	
+	
+	
+	
+	/* vertical and horizontal alignment used for preloader text */
+	line-height:400px;
+	text-align:center;
+	}
+	
+.subunit{ fill: pink; fill-opacity: 0.8 }
+.subunit:hover { fill: white; }
+.subunit-question { fill: orange; opacity: 1.0}
+.subunit-question:hover { fill: gray; }
+.subunit-answer { fill: lightblue; opacity: 1.0}
+.subunit-answer:hover { fill: lightblue; }
+.subunit-boundary {
+  fill: none;
+  stroke: #777;
+  stroke-dasharray: 2,2;
+  stroke-linejoin: round;
+}
+svg {
+  padding-bottom:0;
+  border: 1px solid black;
+}
+.subunit-label {
+  fill: #000;
+  fill-opacity: .8;
+  font-size: 8px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+
+text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  pointer-events: none;
+  fill: #fff;
+}
+
+.img-box {
+	width: 200px;
+        /* min-height: 100px; */
+        padding: 0;
+        display: inline-block;
+        text-align: center;
+        margin: 20px;
+        position: relative;
+}
+.img-box img {
+   vertical-align: bottom;
+}
+.img-box p.answer {
+  width: 75%;
+  border: 1px solid gray;
+  font-size: 15px;
+  margin-left: 10px;
+}
+#question {
+  width: 75%;
+  border: 3px solid gray;
+  margin: 10px auto;
+}
+
+</style>
+
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery-ui-1.10.4/js/jquery-ui-1.10.4.js"></script>
+<script src="js/d3.v3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+<script type="text/javascript" src="js/easyzoom.js"></script>
+<script>
+
+</script>
+</head>
+<body>
+<div id="question"></div>
+<script>
+var width = 1080,
+    height = 450;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("id","droppable");
+    
+var question = {
+    images: [ { src: "1.jpg", zoom:"l1.jpeg", answer: "Mugla" }, 
+              { src: "2.jpg", zoom:"l3.jpg", answer: "Malatya" },
+              { src: "3.gif", zoom:"l2.jpg", answer: "Konya" }],
+
+    answers: ["Mugla", "Mersin","Malatya","Mardin","Konya", "Ankara"]
+};
+
+question.images.forEach(function (d) {
+  var box = $("<div class='img-box'></div>");
+  var img = $("<img src='" + d.src + "' >\n");
+  var zoom = $("<a href='" + d.zoom + "' class='zoom1'>");
+  box.append(zoom);
+  zoom.append(img);
+  var span = $("<p class='answer'>?</p>");
+  box.append(span);
+  box.data("correct", d.answer);
+  $("#question").append(box);
+})
+jQuery(function($){
+	
+	$('a.zoom1').each(function() {
+          $(this).easyZoom( {parent: $(this).parent()} );
+        })
+
+});
+var droppable_cities = null;
+var subunits_svg = null;
+var drop_target = null;
+var path = null;
+var subunits;
+
+d3.json("tr.json", function(error, tr) {
+  if (error) return console.error(error);
+  
+  subunits = topojson.feature(tr, tr.objects.subunits);
+ 
+  var projection = d3.geo.equirectangular()
+    .center([36, 27])
+    .rotate([+2, -4])
+    //.parallels([36, 42])
+    .scale(3000)
+    .translate([width / 2 , (height /2) + 400 ]);
+    //.precision(.1); 
+    /*var graticule = d3.geo.graticule()
+      .extent([[-40 - 42, 27 - 42], [-2 - 42, 27 - 42]]);
+    //.step([2, 2]);*/
+
+  path = d3.geo.path()
+    .projection(projection);
+
+  // outer borders  
+  svg.append("path")
+    .datum(subunits)
+    .attr("d", path); 
+
+  subunits_svg = svg.selectAll(".subunit")
+    .data(subunits.features)
+    .enter().append("path")
+    	.attr("class", function(d) { return question.answers.indexOf(d.id) >= 0 ? "subunit-question"  : "subunit" })
+    	//.attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+    	.attr("id", function(d) { return "city-" + d.id; })
+    	.attr("title", function(d) { return d.id; })
+    	.attr("d", path);
+ 	
+
+
+
+    
+    var n=svg.selectAll(".subunit-label")
+      .data(subunits.features)
+    .enter().append("text")
+      .attr("class", function(d) { return "subunit-label"; })
+      .attr("id", function(d) { return "subunit-label-" + d.id; })
+      .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+      .attr("dy", function(d) {
+          if (d.id == "Antalya") return "-1.4em";
+          else if (d.id == "Izmir") return "1em";
+	  else if (d.id == "Edirne") return "1em";
+	  else if (d.id == "Tekirdag") return "0.1em";
+	  else if (d.id == "Batman") return "0.8em";
+	  else if (d.id == "Malatya") return "0.9em";
+          else if (d.id == "Giresun") return "-0.1em";
+          else if (d.id == "Zonguldak") return "0.3em";
+          else if (d.id == "Kocaeli") return "0.3em";
+	  else if (d.id == "Mugla") return "0.5em";
+          else return ".35em";
+         })
+      .text(function(d) { return d.id; });
+		           
+  console.log(subunits.features);
+
+  droppable_cities = svg.selectAll(".subunit-question")
+  // console.log(droppable_cities);
+  droppable_cities.on('mouseover',function(d,i){
+	drop_target = d.id; 
+  });
+  droppable_cities.on('mouseleave',function(e){
+	drop_target = null;
+  });
+
+   
+  svg.append("path")
+      .datum(topojson.mesh(tr, tr.objects.subunits, function(a, b) { return a !== b && a.id !== "TUR"; }))
+      .attr("d", path)
+      .attr("class", "subunit-boundary");
+
+});
+</script>
+
+
+<script>
+
+
+var body = d3.select("body");
+
+$("#question img").draggable({
+	revert: true,
+	revertDuration: 200,
+	cursorAt: { left: -2, top: -2 }, 
+
+	// Register what we're dragging with the drop manager
+	start: function (e) {
+		// Getting the datum from the standard event target requires more work.
+		// DragDropManager.dragged = d3.select(e.target).datum();
+		//console.log(DragDropManager.dragged);
+		
+	},
+	// Set cursors based on matches, prepare for a drop
+	drag: function (e) {
+                var img = $(e.target);
+                if (drop_target == null) {
+                  img.draggable("option", "revert", true);
+                }
+                else {
+                  img.draggable("option", "revert", false);
+                }
+ 
+	},	
+	stop: function (e,ui) {
+		// Dropped on a non-matching target.
+               
+		var city = drop_target;
+                //console.log(city)
+                var img = $(e.target);
+                //console.log(img.parent().parent())
+                if (drop_target != null) {
+                  img.parent().parent().children("p").text(city);
+                   
+		  
+	 	  /*var x = $(e.target).css("transform", "translate(" + path.centroid(data) + ")");
+		  console.log(x);*/
+                  d3.select("#city-" + city)
+                    .classed("subunit-question", false)
+                    .classed("subunit-answer", true)
+		    .data(subunits.features)
+                    .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+		 
+		  d3.select(e.target)
+		    
+		    .attr("width", "20%")
+		    .attr("heigth", "20%");
+		  /*var data = subunits.features;
+		  var x= $(e.target).css("transform", function(data) { return "translate(" + path.centroid(data) + ")"; })
+		  $(e.target).css("width" , "20%")
+		  $(e.target).css("height" , "20%");*/
+console.log(x)
+                }
+                					
+		// $(e.target).draggable("disable");
+				
+		
+	}
+
+});
+
+</script>
+</html>
